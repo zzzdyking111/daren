@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>模板文件1</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<!-- 引入外部CSS文件 -->
+<link rel="stylesheet" href="../css/pic.css">
+</head>
+
+<body>
+<a id="top" style="display: block; height: 0; visibility: hidden;">顶部</a>
+<p>汝州新时代精英学校，招生热线13613865504</p>
+<!-- TemplateBeginEditable name="主要内容" -->主要内容<!-- TemplateEndEditable -->
+<p>
+<!-- 在你的HTML页面的任何位置 -->
+<a href="#top">回顶部</a>
+<a href="#" onclick="history.go(-1);return true;">回上页</a>
+<a href="../index.html">回首页</a>
+</p>
+</body>
+</html>

@@ -1,0 +1,25 @@
+/* CSS Document */
+body {
+    /*background-color: #f0f0f0;*/
+	font-size: 20px;
+}
+
+    /* 使用CSS设置图片的宽度和高度 */
+    .resize-image {
+        /*  width: 300px;
+        	height: 600px;  */
+		width: 450px; /* 设置图片宽度 */
+    	/* height: 150px;  设置图片高度 */
+    	object-fit: contain; /* 保持宽高比，内容全部可见 */
+    }
+
+/* max-width: 100%：图片宽度最大不超过父容器，手机小屏时自动缩小
+
+height: auto：高度随宽度等比缩放，不变形
+
+适用场景：所有普通图片，简单有效。 */
+
+img {
+  max-width: 100%;
+  height: auto;
+}
