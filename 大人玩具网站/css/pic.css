@@ -35,7 +35,7 @@ body {
 }
 
 /* 3. 各级标题与辅助文字 */
-h1 { font-size: 2.4rem; } /* 24px */
+h1 { font-size: 3.5rem; } /* 35px */
 h2 { font-size: 2.0rem; } /* 20px */
 h3 { font-size: 1.8rem; } /* 18px */
 small, .desc { font-size: 1.3rem; } /* 13px 辅助文字 */
