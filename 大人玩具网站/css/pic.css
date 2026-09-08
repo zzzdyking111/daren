@@ -47,3 +47,15 @@ img {
   display: block;
   margin: 1.5rem 0; /* 图片与上下文字留白 */
 }
+/* 所有标题设置为蓝色，并带一点加粗效果 */
+h1, h2, h3, h4, h5, h6 {
+  display: inline;  /* 变成行内元素，不换行 */
+  color: #007AFF;
+  font-weight: 600; /* 加粗让蓝色更醒目 */
+  margin: 1.6rem 0 0.8rem 0; /* 上边距大一点，下边距小一点，与正文拉开层次 */
+}
+
+/* 各级标题字号 */
+h1 { font-size: 2.4rem; }
+h2 { font-size: 2.0rem; }
+h3 { font-size: 1.8rem; }
