@@ -28,7 +28,7 @@ html {
 
 /* 2. 正文强制设为 16px (使用 rem) */
 body {
-  font-size: 1.6rem; /* 即 16px */
+  font-size: 2.0rem; /* 即 20px */
   line-height: 1.8;   /* 行高为字体1.8倍，阅读舒适 */
   color: #333;
   padding: 2rem;
