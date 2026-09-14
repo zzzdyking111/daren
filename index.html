@@ -1,39 +1,50 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="zh">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<style type="text/css">
-body {
-	font-size: 40px;
-}
-.red_text{
-	color: #FF0000; /* 使用十六进制颜色代码 */}
-</style>
-<title>dr玩具网站</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>征婚信息发布</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-<p>dr玩具网站<a name="home" id="home"></a></p>
-<p> </p>
-<ol>
-	<li>
-		<a href="大人玩具网站\cywz_常用网址\cywz_常用网址.html">
-		常用网址
-		</a>
-	</li>
-	<li>
-		<a href="大人玩具网站\wj玩具\wjlb玩具列表.html">
-		wjlb玩具列表
-		</a>
-	</li>
 
-</ol>
+<h1>征婚信息发布</h1>
+<p class="sub">真实审核 · 仅作展示 · 自行联系</p>
 
-<!-- <p>1-<a href="大人玩具网站网站\cywz_常用网址\cywz_常用网址.html">常用网址</a></p> -->
+<div class="cta">
+  投稿请加微信：<b>你的微信号</b><br>
+  <span>50元/条 · 审核后发布 · 不参与撮合</span>
+</div>
 
-<p>&nbsp;外层</p>
+<div id="list"></div>
 
+<div class="footer">
+  本站仅提供征婚信息展示服务，所有信息由发布者本人提供并负责。<br>
+  本站不参与撮合、介绍、沟通，不保证信息真实性，请自行核实。<br>
+  因联系产生的任何纠纷与本站无关。
+</div>
+
+<script>
+fetch('data.json')
+  .then(res => res.json())
+  .then(data => {
+    const list = document.getElementById('list');
+    list.innerHTML = data.map(p => `
+      <div class="card">
+        <img src="${p.photo}" alt="${p.name}" onerror="this.style.display='none'">
+        <div class="name">${p.name}</div>
+        <div class="meta">${p.age}岁 · ${p.city} · ${p.job} · ${p.marriage} · ${p.height}</div>
+        <div class="intro">${p.intro}</div>
+        <div class="req">择偶要求：${p.requirement}</div>
+        <div class="contact">联系方式：${p.contact}</div>
+      </div>
+    `).join('');
+  })
+  .catch(err => {
+    document.getElementById('list').innerHTML = '<p style="text-align:center;color:#999;">信息加载失败</p>';
+    console.error(err);
+  });
+</script>
 
 </body>
-
 </html>

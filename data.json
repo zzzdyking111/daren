@@ -1,0 +1,42 @@
+[
+  {
+    "id": "001",
+    "name": "小A",
+    "age": 28,
+    "city": "杭州",
+    "job": "设计师",
+    "marriage": "未婚",
+    "height": "165cm",
+    "intro": "性格开朗，喜欢旅行和摄影，希望遇到真诚的人。",
+    "requirement": "30-35岁，有稳定工作，性格温和。",
+    "contact": "微信 xxxxx",
+    "photo": "images/001.jpg"
+	
+  },
+  {
+    "id": "002",
+    "name": "小B",
+    "age": 32,
+    "city": "杭州",
+    "job": "程序员",
+    "marriage": "未婚",
+    "height": "178cm",
+    "intro": "平时喜欢健身和看书，生活规律。",
+    "requirement": "25-30岁，性格好，能聊得来。",
+    "contact": "微信 yyyyy",
+    "photo": "images/002.jpg"
+  },
+  {
+    "id": "003",
+    "name": "小C",
+    "age": 32,
+    "city": "杭州",
+    "job": "程序员",
+    "marriage": "未婚",
+    "height": "178cm",
+    "intro": "平时喜欢健身和看书，生活规律。",
+    "requirement": "25-30岁，性格好，能聊得来。",
+    "contact": "微信 yyyyy",
+    "photo": "images/003.jpg"
+  }
+]
