@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>二维码聚合 · 一页多码</title>
+  <!-- Font Awesome 5 (简洁图标库) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* 全局重置与字体 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(145deg, #f7f9fc 0%, #eef2f7 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      color: #1e293b;
+    }
+
+    /* 主卡片容器 */
+    .aggregator {
+      max-width: 1200px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 3.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+      padding: 2.5rem 2rem;
+      transition: all 0.2s ease;
+    }
+
+    /* 头部区域 */
+    .header {
+      text-align: center;
+      margin-bottom: 2.8rem;
+    }
+
+    .header h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #0f172a, #3b4a6b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .header h1 i {
+      background: linear-gradient(145deg, #2563eb, #3b82f6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-size: 2.2rem;
+    }
+
+    .subhead {
+      font-size: 1.1rem;
+      color: #475569;
+      font-weight: 400;
+      max-width: 600px;
+      margin: 0 auto;
+      border-bottom: 1px dashed #cbd5e1;
+      padding-bottom: 1.2rem;
+      display: inline-block;
+    }
+
+    /* 二维码网格 */
+    .qr-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.8rem;
+      justify-content: center;
+      align-items: stretch;
+      margin-bottom: 1rem;
+    }
+
+    /* 单个二维码卡片 */
+    .qr-card {
+      background: #ffffff;
+      border-radius: 2rem;
+      box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.02);
+      padding: 1.8rem 1rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.2s ease, box-shadow 0.25s ease;
+      text-decoration: none;
+      color: inherit;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+    }
+
+    .qr-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 25px 35px -12px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(59, 130, 246, 0.15);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    /* 二维码图片容器 */
+    .qr-image {
+      width: 100%;
+      aspect-ratio: 1/1;
+      background: #f1f5f9;
+      border-radius: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+      padding: 0.75rem;
+      transition: background 0.2s;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    .qr-card:hover .qr-image {
+      background: #ffffff;
+    }
+
+    /* 模拟二维码图片 — 使用内联SVG占位，实际可替换为真实二维码图片 */
+    .qr-image svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-radius: 0.85rem;
+    }
+
+    /* 可选的 img 标签方式（如果使用真实图片可取消注释并放入 img） */
+    .qr-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 0.85rem;
+      display: block;
+    }
+
+    /* 卡片标题 */
+    .qr-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      text-align: center;
+      color: #0f172a;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+    }
+
+    .qr-card h3 i {
+      font-size: 1.1rem;
+      color: #3b82f6;
+      opacity: 0.85;
+    }
+
+    /* 描述小字 */
+    .qr-desc {
+      font-size: 0.85rem;
+      color: #64748b;
+      text-align: center;
+      font-weight: 400;
+      line-height: 1.4;
+      padding: 0 0.25rem;
+      word-break: break-word;
+    }
+
+    /* 底部装饰信息 */
+    .footer-note {
+      text-align: center;
+      margin-top: 2.5rem;
+      font-size: 0.9rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 1.5rem;
+    }
+
+    .footer-note i {
+      font-size: 0.8rem;
+      color: #cbd5e1;
+    }
+
+    /* 针对小屏幕优化 */
+    @media (max-width: 600px) {
+      body {
+        padding: 0.8rem;
+      }
+
+      .aggregator {
+        padding: 1.8rem 1.2rem;
+        border-radius: 2.5rem;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .header h1 i {
+        font-size: 1.8rem;
+      }
+
+      .subhead {
+        font-size: 0.95rem;
+        padding-bottom: 1rem;
+      }
+
+      .qr-grid {
+        gap: 1.2rem;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      }
+
+      .qr-card {
+        padding: 1.2rem 0.6rem 1.2rem;
+        border-radius: 1.8rem;
+      }
+
+      .qr-image {
+        border-radius: 1.2rem;
+        padding: 0.5rem;
+      }
+
+      .qr-card h3 {
+        font-size: 1.05rem;
+      }
+
+      .qr-desc {
+        font-size: 0.75rem;
+      }
+    }
+
+    /* 让卡片保持相同高度 */
+    .qr-card {
+      height: 100%;
+    }
+
+    .qr-grid {
+      align-items: stretch;
+    }
+
+    /* 移除 a 标签默认下划线 */
+    a {
+      text-decoration: none;
+    }
+
+    /* 可访问性焦点样式 */
+    .qr-card:focus-visible {
+      outline: 3px solid #3b82f6;
+      outline-offset: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="aggregator">
+    <!-- 头部标题 -->
+    <div class="header">
+      <h1>
+        <i class="fas fa-qrcode"></i> 二维码聚合页
+      </h1>
+      <div class="subhead">
+        扫描下方任意二维码 · 快速访问
+      </div>
+    </div>
+
+    <!-- 二维码卡片网格 (6个示例) 使用内联SVG模拟二维码图案, 可替换为真实图片 -->
+    <div class="qr-grid">
+      
+      <!-- 卡片 1: 微信 -->
+      <a href="#" class="qr-card" target="_blank" rel="noopener">
+        <div class="qr-image">
+          <!-- 模拟二维码 SVG 图案 (实际使用可替换为 <img src="wechat-qr.png" alt="微信二维码">) -->
+          <img src="https://s41.ax1x.com/2026/09/18/pnKhBUf.jpg" alt="微信二维码">
+        </div>
+        <h3><i class="fab fa-weixin"></i> 微信</h3>
+        <div class="qr-desc"><!-- 扫码添加好友 / --> 关注公众号</div>
+      </a>
+
+      <!-- 卡片 2: 支付宝 -->
+      <a href="#" class="qr-card" target="_blank" rel="noopener">
+        <div class="qr-image">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="支付宝二维码示意图">
+            <rect width="100" height="100" fill="#ffffff" rx="8" />
+            <rect x="12" y="12" width="22" height="22" fill="#1e293b" rx="4" />
+            <rect x="18" y="18" width="10" height="10" fill="#ffffff" rx="2" />
+            <rect x="66" y="12" width="22" height="22" fill="#1e293b" rx="4" />
+            <rect x="72" y="18" width="10" height="10" fill="#ffffff" rx="2" />
+            <rect x="12" y="66" width="22" height="22" fill="#1e293b" rx="4" />
+            <rect x="18" y="72" width="10" height="10" fill="#ffffff" rx="2" />
+            <!-- 不同的点阵排列，显得不同 -->
+            <rect x="44" y="16" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="56" y="28" width="6" height="6" fill="#1e293b" rx="1" />
+            <rect x="12" y="44" width="10" height="10" fill="#1e293b" rx="2" />
+            <rect x="30" y="44" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="48" y="46" width="12" height="12" fill="#1e293b" rx="2" />
+            <rect x="68" y="44" width="10" height="10" fill="#1e293b" rx="2" />
+            <rect x="48" y="68" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="64" y="72" width="12" height="12" fill="#1e293b" rx="2" />
+            <rect x="82" y="72" width="6" height="6" fill="#1e293b" rx="1" />
+            <rect x="32" y="80" width="8" height="8" fill="#1e293b" rx="1.5" />
+          </svg>
+        </div>
+        <h3><i class="fab fa-alipay"></i> 支付宝</h3>
+        <div class="qr-desc">扫码付款 / 领红包</div>
+      </a>
+
+      <!-- 卡片 3: QQ -->
+      <a href="#" class="qr-card" target="_blank" rel="noopener">
+        <div class="qr-image">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QQ二维码示意图">
+            <rect width="100" height="100" fill="#ffffff" rx="8" />
+            <rect x="12" y="12" width="22" height="22" fill="#1e293b" rx="4" />
+            <rect x="18" y="18" width="10" height="10" fill="#ffffff" rx="2" />
+            <rect x="66" y="12" width="22" height="22" fill="#1e293b" rx="4" />
+            <rect x="72" y="18" width="10" height="10" fill="#ffffff" rx="2" />
+            <rect x="12" y="66" width="22" height="22" fill="#1e293b" rx="4" />
+            <rect x="18" y="72" width="10" height="10" fill="#ffffff" rx="2" />
+            <!-- 不同分布 -->
+            <rect x="44" y="14" width="10" height="10" fill="#1e293b" rx="2" />
+            <rect x="60" y="22" width="6" height="6" fill="#1e293b" rx="1" />
+            <rect x="14" y="44" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="28" y="46" width="12" height="12" fill="#1e293b" rx="2" />
+            <rect x="48" y="48" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="68" y="44" width="10" height="10" fill="#1e293b" rx="2" />
+            <rect x="82" y="46" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="46" y="68" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="62" y="70" width="12" height="12" fill="#1e293b" rx="2" />
+            <rect x="30" y="82" width="10" height="10" fill="#1e293b" rx="2" />
+          </svg>
+        </div>
+        <h3><i class="fab fa-qq"></i> QQ</h3>
+        <div class="qr-desc">扫码加好友 / 入群</div>
+      </a>
+
+      <!-- 卡片 4: 微博 -->
+      <a href="#" class="qr-card" target="_blank" rel="noopener">
+        <div class="qr-image">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="微博二维码示意图">
+            <rect width="100" height="100" fill="#ffffff" rx="8" />
+            <rect x="12" y="12" width="22" height="22" fill="#1e293b" rx="4" />
+            <rect x="18" y="18" width="10" height="10" fill="#ffffff" rx="2" />
+            <rect x="66" y="12" width="22" height="22" fill="#1e293b" rx="4" />
+            <rect x="72" y="18" width="10" height="10" fill="#ffffff" rx="2" />
+            <rect x="12" y="66" width="22" height="22" fill="#1e293b" rx="4" />
+            <rect x="18" y="72" width="10" height="10" fill="#ffffff" rx="2" />
+            <rect x="44" y="16" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="56" y="18" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="14" y="44" width="10" height="10" fill="#1e293b" rx="2" />
+            <rect x="30" y="44" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="46" y="46" width="10" height="10" fill="#1e293b" rx="2" />
+            <rect x="64" y="48" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="78" y="46" width="10" height="10" fill="#1e293b" rx="2" />
+            <rect x="46" y="68" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="58" y="74" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="76" y="72" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="30" y="80" width="10" height="10" fill="#1e293b" rx="2" />
+          </svg>
+        </div>
+        <h3><i class="fab fa-weibo"></i> 微博</h3>
+        <div class="qr-desc">扫码关注微博动态</div>
+      </a>
+
+      <!-- 卡片 5: 抖音 -->
+      <a href="#" class="qr-card" target="_blank" rel="noopener">
+        <div class="qr-image">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="抖音二维码示意图">
+            <rect width="100" height="100" fill="#ffffff" rx="8" />
+            <rect x="12" y="12" width="22" height="22" fill="#1e293b" rx="4" />
+            <rect x="18" y="18" width="10" height="10" fill="#ffffff" rx="2" />
+            <rect x="66" y="12" width="22" height="22" fill="#1e293b" rx="4" />
+            <rect x="72" y="18" width="10" height="10" fill="#ffffff" rx="2" />
+            <rect x="12" y="66" width="22" height="22" fill="#1e293b" rx="4" />
+            <rect x="18" y="72" width="10" height="10" fill="#ffffff" rx="2" />
+            <rect x="46" y="14" width="6" height="6" fill="#1e293b" rx="1" />
+            <rect x="58" y="20" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="14" y="44" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="30" y="46" width="12" height="12" fill="#1e293b" rx="2" />
+            <rect x="48" y="48" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="66" y="44" width="10" height="10" fill="#1e293b" rx="2" />
+            <rect x="84" y="48" width="6" height="6" fill="#1e293b" rx="1" />
+            <rect x="46" y="68" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="60" y="72" width="12" height="12" fill="#1e293b" rx="2" />
+            <rect x="32" y="82" width="8" height="8" fill="#1e293b" rx="1.5" />
+          </svg>
+        </div>
+        <h3><i class="fab fa-tiktok"></i> 抖音</h3>
+        <div class="qr-desc">扫码看视频 / 关注</div>
+      </a>
+
+      <!-- 卡片 6: 官网/其他 -->
+      <a href="#" class="qr-card" target="_blank" rel="noopener">
+        <div class="qr-image">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="官网二维码示意图">
+            <rect width="100" height="100" fill="#ffffff" rx="8" />
+            <rect x="12" y="12" width="22" height="22" fill="#1e293b" rx="4" />
+            <rect x="18" y="18" width="10" height="10" fill="#ffffff" rx="2" />
+            <rect x="66" y="12" width="22" height="22" fill="#1e293b" rx="4" />
+            <rect x="72" y="18" width="10" height="10" fill="#ffffff" rx="2" />
+            <rect x="12" y="66" width="22" height="22" fill="#1e293b" rx="4" />
+            <rect x="18" y="72" width="10" height="10" fill="#ffffff" rx="2" />
+            <rect x="48" y="16" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="62" y="28" width="6" height="6" fill="#1e293b" rx="1" />
+            <rect x="16" y="46" width="10" height="10" fill="#1e293b" rx="2" />
+            <rect x="32" y="44" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="50" y="46" width="12" height="12" fill="#1e293b" rx="2" />
+            <rect x="70" y="44" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="84" y="46" width="6" height="6" fill="#1e293b" rx="1" />
+            <rect x="48" y="66" width="8" height="8" fill="#1e293b" rx="1.5" />
+            <rect x="62" y="74" width="10" height="10" fill="#1e293b" rx="2" />
+            <rect x="34" y="80" width="8" height="8" fill="#1e293b" rx="1.5" />
+          </svg>
+        </div>
+        <h3><i class="fas fa-globe"></i> 官网</h3>
+        <div class="qr-desc">扫码访问官方网站</div>
+      </a>
+
+    </div>
+
+    <!-- 底部小提示 -->
+    <div class="footer-note">
+      <i class="fas fa-camera"></i> 打开相机或扫码工具 · 对准二维码即可
+      <i class="fas fa-mobile-alt"></i>
+    </div>
+  </div>
+</body>
+</html>
